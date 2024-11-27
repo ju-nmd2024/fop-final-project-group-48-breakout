@@ -80,10 +80,18 @@ class Bowl {
     this.width = width;
     this.height = height;
   }
+  draw() {
+    image(
+      this.x * gridSize,
+      this.y * gridSize,
+      this.width * gridSize,
+      this.height * gridSize
+    );
+  }
 }
 
 //upper row
-let pinkBowl1 = new Bowl(1, 1, 1, 1);
+let pinkBowl1 = new Bowl(2, 1, 1, 1);
 let greenBowl1 = new Bowl();
 let yellowBowl1 = new Bowl();
 let orangeBowl1 = new Bowl();
@@ -110,8 +118,8 @@ function startScreen() {
   backgroundScreen();
 
   //cat and speach bubble
-  image(orangeCat, 400, 60, 400, 400);
-  image(speachBubble, 180, 60, 250, 180);
+  image(orangeCat, x - 300, y - 340, 400, 400);
+  image(speachBubble, x - 520, y - 340, 250, 180);
 
   //game name
   fill(0, 0, 0);
@@ -143,24 +151,24 @@ function startScreen() {
 
 function ball() {
   fill(152, 204, 255);
-  ellipse(350, 300, 25);
+  ellipse(x - 350, y - 100, 25);
 }
 
 function paddle() {
   fill(100);
-  rect(300, 380, 150, 15, 10);
+  rect(x - 400, y - 15, 150, 15, 10);
 }
 
 function gameScreen() {
   backgroundScreen();
   drawGrid();
 
-  image(orangeCat, 610, 300, 100, 100);
-  image(speachBubble, 520, 300, 100, 50);
-  image(pinkBowl, -10, -30, 100, 100);
-  image(greenBowl, 50, -30, 100, 100);
-  image(yellowBowl, 110, -30, 100, 100);
-  image(orangeBowl, 180, -30, 100, 100);
+  image(orangeCat, x - 90, y - 100, 100, 100);
+  image(speachBubble, x - 180, y - 100, 100, 50);
+  image(pinkBowl, x - 710, y - 430, 100, 100);
+  image(greenBowl, x - 650, y - 430, 100, 100);
+  image(yellowBowl, x - 590, y - 430, 100, 100);
+  image(orangeBowl, x - 520, y - 430, 100, 100);
 
   paddle();
   ball();
