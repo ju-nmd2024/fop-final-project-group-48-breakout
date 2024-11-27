@@ -5,6 +5,18 @@ let greenBowl;
 let orangeBowl;
 let speachBubble;
 
+//paddle var/const
+const paddleMove = 5;
+let paddleX = 300;
+let paddleY = 385;
+
+//ball variables
+let ballX = 350;
+let ballY = 200;
+let r = 20;
+let speedX = 5;
+let speedY = 2;
+
 function preload() {
   orangeCat = loadImage("orangeCat.png");
   pinkBowl = loadImage("pinkBowl.svg");
@@ -25,8 +37,6 @@ y = 400;
 const gridLength = 10;
 const gridSize = 70;
 let gameState = true;
-let ballX = 350;
-let ballY = 0;
 
 function drawGrid() {
   push();
@@ -151,12 +161,12 @@ function startScreen() {
 
 function ball() {
   fill(152, 204, 255);
-  ellipse(x - 350, y - 100, 25);
+  ellipse(ballX, ballY, r * 2, r * 2);
 }
 
 function paddle() {
   fill(100);
-  rect(x - 400, y - 15, 150, 15, 10);
+  rect(paddleX, paddleY, 150, 15, 10);
 }
 
 function gameScreen() {
@@ -175,5 +185,27 @@ function gameScreen() {
 }
 
 function draw() {
-  startScreen();
+  gameScreen();
+
+  // Paddle movement inspired by Garrit's emoji example https://pixelkind.github.io/foundationsofprogramming/programming/12-02-exercise
+  if (keyIsDown(37)) {
+    paddleX = paddleX - paddleMove;
+  } else if (keyIsDown(39)) {
+    paddleX = paddleX + paddleMove;
+  }
+  // Ball movement inspired by https://editor.p5js.org/icm/sketches/BJKWv5Tn
+  ballX += speedX;
+  ballY += speedY;
+  //Side walls blockade
+  if (ballX > 700 - r || ballX < 0 + r) {
+    speedX = -speedX;
+  }
+  //Ceiling blockade (for now until we finish bowls)
+  if (ballY < 0 + r) {
+    speedY = -speedY;
+  }
+  //Paddle blockade at floor side
+  if (ballY > paddleY - r && ballX > paddleX && ballX < paddleX + 150) {
+    speedY = -speedY;
+  }
 }
