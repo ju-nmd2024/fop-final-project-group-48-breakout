@@ -175,5 +175,5 @@ function gameScreen() {
 }
 
 function draw() {
-  gameScreen();
+  startScreen();
 }
