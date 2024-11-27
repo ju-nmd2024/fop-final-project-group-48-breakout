@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 595.3 841.9">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ea9a2d;
+      }
+
+      .cls-2 {
+        fill: #71b8d6;
+        opacity: .8;
+        stroke: #0d99d6;
+        stroke-miterlimit: 10;
+        stroke-width: 2px;
+      }
+    </style>
+  </defs>
+  <!-- Generator: Adobe Illustrator 28.7.2, SVG Export Plug-In . SVG Version: 1.2.0 Build 154)  -->
+  <g>
+    <g id="Layer_1">
+      <path class="cls-1" d="M469.7,381.5c0,83.2-77.2,150.6-172.5,150.6s-172.5-67.4-172.5-150.6c0,0-6.6-71,172.5-69.5s172.5,69.5,172.5,69.5Z"/>
+      <ellipse class="cls-2" cx="295.2" cy="367.5" rx="148.4" ry="43.4"/>
+    </g>
+  </g>
+</svg>

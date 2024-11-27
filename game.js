@@ -1,3 +1,19 @@
+let orangeCat;
+let pinkBowl;
+let yellowBowl;
+let greenBowl;
+let orangeBowl;
+let speachBubble;
+
+function preload() {
+  orangeCat = loadImage("orangeCat.png");
+  pinkBowl = loadImage("pinkBowl.svg");
+  yellowBowl = loadImage("yellowBowl.svg");
+  greenBowl = loadImage("greenBowl.svg");
+  orangeBowl = loadImage("orangeBowl.svg");
+  speachBubble = loadImage("speachBubble.png");
+}
+
 function setup() {
   createCanvas(700, 400);
   noStroke();
@@ -6,56 +22,25 @@ function setup() {
 x = 700;
 y = 400;
 //let state = "start";
+const gridLength = 10;
+const gridSize = 70;
 let gameState = true;
 let ballX = 350;
 let ballY = 0;
 
-function startScreen() {
-  //stroke
+function drawGrid() {
   push();
-  strokeWeight(15);
-  stroke(0);
-  line(x - 200, y - 350, x + 50, y + 250);
+  stroke(166, 211, 216);
+  noFill();
+  for (let x = 0; x < gridLength; x++) {
+    for (let y = 0; y < gridLength; y++) {
+      rect(x * gridSize, y * gridSize, gridSize, gridSize);
+    }
+  }
   pop();
-
-  //game name
-  fill(0, 0, 0);
-  textSize(40);
-  textFont("Arial");
-  text("Crazy Kitten", x - 280, y - 100, 0);
-
-  //game instructions
-  fill(0, 0, 0);
-  textSize(10);
-  textFont("Arial");
-  text("Instructions", x - 280, y + 50);
-
-  //buttons
-  push();
-  strokeWeight(2);
-  stroke(0, 0, 0);
-  fill(0, 200, 0);
-
-  rect(x + 40, y - 80, 200, 50, 20);
-  pop();
-
-  //button "play game"
-  fill(0, 0, 0);
-  textSize(20);
-  textFont("Arial");
-  text("Play game", x + 100, y - 50);
 }
 
-function ball() {
-  fill(255, 0, 0);
-  ellipse(x, y, 25);
-}
-
-function preload() {
-  img1 = loadImage("images/1998592.png");
-}
-
-function gameScreenOrangeCat() {
+function backgroundScreen() {
   //floor brown
   fill(246, 198, 150);
   rect(x - 700, y - 10, 700, 10);
@@ -76,30 +61,111 @@ function gameScreenOrangeCat() {
   rect(x - 700, y - 90, 700, 5);
 
   //wallpaper
-  fill(183, 250, 195);
+  fill(255, 213, 213);
   rect(x - 700, y - 400, 700, 300);
 
   //board floor
   fill(250, 210, 170);
   rect(x - 700, y - 120, 700, 20);
   fill(255, 255, 255);
-  rect(x - 700, y - 120, 700, 5);
+  rect(x - 700, y - 120, 700, 4);
   fill(240, 177, 104);
   rect(x - 700, y - 100, 700, 2);
-
-  //cat body
-  fill(255, 153, 51);
-  ellipse(x - 350, y - 50, 60, 60);
-  ellipse(x - 350, y - 5, 70, 60);
-
-  //cat tail and paws
-
-  //cat ears
 }
 
-function gameScreenBlackCat() {}
+class Bowl {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+
+//upper row
+let pinkBowl1 = new Bowl(1, 1, 1, 1);
+let greenBowl1 = new Bowl();
+let yellowBowl1 = new Bowl();
+let orangeBowl1 = new Bowl();
+let pinkBowl2 = new Bowl(1, 1, 1, 1);
+let greenBowl2 = new Bowl();
+let yellowBowl2 = new Bowl();
+let orangeBowl2 = new Bowl();
+let pinkBowl3 = new Bowl(1, 1, 1, 1);
+let greenBowl3 = new Bowl();
+
+//lower row
+let yellowBowl3 = new Bowl();
+let orangeBowl3 = new Bowl();
+let pinkBowl4 = new Bowl(1, 1, 1, 1);
+let greenBowl4 = new Bowl();
+let yellowBowl4 = new Bowl();
+let orangeBowl4 = new Bowl();
+let pinkBowl5 = new Bowl(1, 1, 1, 1);
+let greenBowl5 = new Bowl();
+let yellowBowl5 = new Bowl();
+let orangeBowl5 = new Bowl();
+
+function startScreen() {
+  backgroundScreen();
+
+  //cat and speach bubble
+  image(orangeCat, 400, 60, 400, 400);
+  image(speachBubble, 180, 60, 250, 180);
+
+  //game name
+  fill(0, 0, 0);
+  textSize(40);
+  textFont("Arial");
+  text("Crazy Kitten", x - 660, y - 180, 0);
+
+  //game instructions
+  fill(0, 0, 0);
+  textSize(10);
+  textFont("Arial");
+  text("Move the padle bla bla bla", x - 460, y - 300);
+
+  //buttons
+  push();
+  strokeWeight(2);
+  stroke(0, 0, 0);
+  fill(0, 200, 0);
+
+  rect(x - 450, y - 100, 200, 50, 20);
+  pop();
+
+  //button "play game"
+  fill(0, 0, 0);
+  textSize(20);
+  textFont("Arial");
+  text("Play game", x - 400, y - 70);
+}
+
+function ball() {
+  fill(152, 204, 255);
+  ellipse(350, 300, 25);
+}
+
+function paddle() {
+  fill(100);
+  rect(300, 380, 150, 15, 10);
+}
+
+function gameScreen() {
+  backgroundScreen();
+  drawGrid();
+
+  image(orangeCat, 610, 300, 100, 100);
+  image(speachBubble, 520, 300, 100, 50);
+  image(pinkBowl, -10, -30, 100, 100);
+  image(greenBowl, 50, -30, 100, 100);
+  image(yellowBowl, 110, -30, 100, 100);
+  image(orangeBowl, 180, -30, 100, 100);
+
+  paddle();
+  ball();
+}
 
 function draw() {
-  gameScreenOrangeCat();
-  image(img1, 0, 0, 400, 200);
+  gameScreen();
 }
