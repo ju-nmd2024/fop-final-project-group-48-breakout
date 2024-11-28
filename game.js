@@ -5,17 +5,21 @@ let greenBowl;
 let orangeBowl;
 let speachBubble;
 
-//paddle var/const
+// Paddle var/const
 const paddleMove = 5;
 let paddleX = 300;
 let paddleY = 385;
 
-//ball variables
+// Ball variables
 let ballX = 350;
 let ballY = 200;
 let r = 20;
 let speedX = 5;
 let speedY = 2;
+
+let bowls = [];
+let COLUMNS = 10;
+let ROWS = 2;
 
 function preload() {
   orangeCat = loadImage("orangeCat.png");
@@ -29,25 +33,46 @@ function preload() {
 function setup() {
   createCanvas(700, 400);
   noStroke();
-}
 
-x = 700;
-y = 400;
-//let state = "start";
-const gridLength = 10;
-const gridSize = 70;
-let gameState = true;
+  x = 700;
+  y = 400;
 
-function drawGrid() {
-  push();
-  stroke(166, 211, 216);
-  noFill();
-  for (let x = 0; x < gridLength; x++) {
-    for (let y = 0; y < gridLength; y++) {
-      rect(x * gridSize, y * gridSize, gridSize, gridSize);
+  // Create bowls and store them in a 2D array
+  let bowlWidth = 60; // Width of each bowl
+  let bowlHeight = 90; // Height of each bowl
+  let margin = 10; // Space between bowls
+
+  // Loop through rows and columns to create bowls
+  for (let row = 0; row < ROWS; row++) {
+    bowls[row] = []; // Initialize the row in the 2D array
+    for (let col = 0; col < COLUMNS; col++) {
+      let x = col * (bowlWidth + margin); // Horizontal spacing
+      let y = row * (bowlHeight + margin) - 10; // Vertical spacing
+
+      let bowlImage;
+      // Alternate between different bowl colors
+      if (col % 4 === 0) bowlImage = pinkBowl;
+      else if (col % 4 === 1) bowlImage = greenBowl;
+      else if (col % 4 === 2) bowlImage = yellowBowl;
+      else bowlImage = orangeBowl;
+
+      bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
     }
   }
-  pop();
+}
+
+class Bowl {
+  constructor(x, y, width, height, img) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.img = img;
+  }
+
+  draw() {
+    image(this.img, this.x, this.y, this.width, this.height);
+  }
 }
 
 function backgroundScreen() {
@@ -82,47 +107,6 @@ function backgroundScreen() {
   fill(240, 177, 104);
   rect(x - 700, y - 100, 700, 2);
 }
-
-class Bowl {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-  }
-  draw() {
-    image(
-      this.x * gridSize,
-      this.y * gridSize,
-      this.width * gridSize,
-      this.height * gridSize
-    );
-  }
-}
-
-//upper row
-let pinkBowl1 = new Bowl(2, 1, 1, 1);
-let greenBowl1 = new Bowl();
-let yellowBowl1 = new Bowl();
-let orangeBowl1 = new Bowl();
-let pinkBowl2 = new Bowl(1, 1, 1, 1);
-let greenBowl2 = new Bowl();
-let yellowBowl2 = new Bowl();
-let orangeBowl2 = new Bowl();
-let pinkBowl3 = new Bowl(1, 1, 1, 1);
-let greenBowl3 = new Bowl();
-
-//lower row
-let yellowBowl3 = new Bowl();
-let orangeBowl3 = new Bowl();
-let pinkBowl4 = new Bowl(1, 1, 1, 1);
-let greenBowl4 = new Bowl();
-let yellowBowl4 = new Bowl();
-let orangeBowl4 = new Bowl();
-let pinkBowl5 = new Bowl(1, 1, 1, 1);
-let greenBowl5 = new Bowl();
-let yellowBowl5 = new Bowl();
-let orangeBowl5 = new Bowl();
 
 function startScreen() {
   backgroundScreen();
@@ -171,14 +155,17 @@ function paddle() {
 
 function gameScreen() {
   backgroundScreen();
-  drawGrid();
 
+  // Cat and speech bubble
   image(orangeCat, x - 90, y - 100, 100, 100);
   image(speachBubble, x - 180, y - 100, 100, 50);
-  image(pinkBowl, x - 710, y - 430, 100, 100);
-  image(greenBowl, x - 650, y - 430, 100, 100);
-  image(yellowBowl, x - 590, y - 430, 100, 100);
-  image(orangeBowl, x - 520, y - 430, 100, 100);
+
+  // Draw bowls
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLUMNS; col++) {
+      bowls[row][col].draw(); // Draw each bowl
+    }
+  }
 
   paddle();
   ball();
