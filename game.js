@@ -19,14 +19,14 @@ let speedY = 2;
 
 let bowls = [];
 let COLUMNS = 10;
-let ROWS = 2;
+let ROWS = 3;
 
 function preload() {
   orangeCat = loadImage("orangeCat.png");
-  pinkBowl = loadImage("pinkBowl.svg");
-  yellowBowl = loadImage("yellowBowl.svg");
-  greenBowl = loadImage("greenBowl.svg");
-  orangeBowl = loadImage("orangeBowl.svg");
+  pinkBowl = loadImage("pinkBowl.png");
+  yellowBowl = loadImage("yellowBowl.png");
+  greenBowl = loadImage("greenBowl.png");
+  orangeBowl = loadImage("orangeBowl.png");
   speachBubble = loadImage("speachBubble.png");
 }
 
@@ -38,16 +38,16 @@ function setup() {
   y = 400;
 
   // Create bowls and store them in a 2D array
-  let bowlWidth = 60; // Width of each bowl
-  let bowlHeight = 90; // Height of each bowl
+  let bowlWidth = 60.5; // Width of each bowl
+  let bowlHeight = 39; // Height of each bowl
   let margin = 10; // Space between bowls
 
   // Loop through rows and columns to create bowls
   for (let row = 0; row < ROWS; row++) {
     bowls[row] = []; // Initialize the row in the 2D array
     for (let col = 0; col < COLUMNS; col++) {
-      let x = col * (bowlWidth + margin); // Horizontal spacing
-      let y = row * (bowlHeight + margin) - 10; // Vertical spacing
+      let x = col * (bowlWidth + margin) + 1; // Horizontal spacing
+      let y = row * (bowlHeight + margin) + 10; // Vertical spacing
 
       let bowlImage;
       // Alternate between different bowl colors
@@ -145,7 +145,7 @@ function startScreen() {
 
 function ball() {
   fill(152, 204, 255);
-  ellipse(ballX, ballY, r * 2, r * 2);
+  ellipse(ballX, ballY, r * 1.5, r * 1.5);
 }
 
 function paddle() {
