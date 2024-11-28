@@ -172,7 +172,7 @@ function gameScreen() {
 }
 
 function draw() {
-  gameScreen();
+  startScreen();
 
   // Paddle movement inspired by Garrit's emoji example https://pixelkind.github.io/foundationsofprogramming/programming/12-02-exercise
   if (keyIsDown(37)) {
@@ -196,3 +196,37 @@ function draw() {
     speedY = -speedY;
   }
 }
+
+//to do list
+
+//Idea of the game
+//The cat need help from you to destroy all the bowls. The cat will cheer you on
+//while you play. If you win, the cat will thank you but if you lose - the cat will
+//disapear and the angry human will show up will blame everything on you.
+// * - a thought is that we can add eyes on the cat so it looks like it is hypnotized
+//     and trying to control the behaviour of the human!
+
+//start screen
+//- make the button interactive (move a bit to the left?)
+//- write instructions in the speach bubble
+//- decide name
+//- make the button interactive
+
+//game screen
+//- the the bowls interactive
+//- make the paddle stop at x (0 & 700)
+//- make ball stop at y = 400
+//- when the ball hits a bowl - speach bubble will appear with random text
+
+//win screen
+//- create a "play again" button and make it interactive
+//- change the text in the speach bubble
+//- maybe add some fireworks?
+
+//lose screen
+//- create a "play again" button and make it interactive
+//- change the text in the speach bubble
+//- change the cat to a human?
+
+//Game states
+//fix mouseClicked (start --> game)(game --> win)(game --> lose)
