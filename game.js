@@ -12,16 +12,21 @@ let paddleY = 385;
 
 // Ball variables
 let ballX = 350;
-let ballY = 200;
+let ballY = 180;
 let r = 20;
 let speedX = 5;
 let speedY = 2;
 
 let bowls = [];
 let COLUMNS = 10;
-let ROWS = 3;
+let ROWS = 2;
 
+// To make game begin at startScreen
+let state = "start";
+
+// Load pre-made images into code
 function preload() {
+  angryPerson = loadImage("angryPerson.png");
   orangeCat = loadImage("orangeCat.png");
   pinkBowl = loadImage("pinkBowl.png");
   yellowBowl = loadImage("yellowBowl.png");
@@ -59,7 +64,11 @@ function setup() {
       bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
     }
   }
+
+  wallColor = color(255, 213, 213);
 }
+
+let wallColor;
 
 class Bowl {
   constructor(x, y, width, height, img) {
@@ -76,7 +85,7 @@ class Bowl {
 }
 
 function backgroundScreen() {
-  //floor brown
+  // Floor brown
   fill(246, 198, 150);
   rect(x - 700, y - 10, 700, 10);
   rect(x - 700, y - 25, 700, 10);
@@ -86,7 +95,7 @@ function backgroundScreen() {
   rect(x - 700, y - 85, 700, 10);
   rect(x - 700, y - 100, 700, 10);
 
-  //floor light brown
+  // Floor light brown
   fill(246, 206, 167);
   rect(x - 700, y - 15, 700, 5);
   rect(x - 700, y - 30, 700, 5);
@@ -95,11 +104,11 @@ function backgroundScreen() {
   rect(x - 700, y - 75, 700, 5);
   rect(x - 700, y - 90, 700, 5);
 
-  //wallpaper
-  fill(255, 213, 213);
+  // Wallpaper
+  fill(wallColor);
   rect(x - 700, y - 400, 700, 300);
 
-  //board floor
+  // Board floor
   fill(250, 210, 170);
   rect(x - 700, y - 120, 700, 20);
   fill(255, 255, 255);
@@ -111,36 +120,79 @@ function backgroundScreen() {
 function startScreen() {
   backgroundScreen();
 
-  //cat and speach bubble
+  // Cat and speach bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
   image(speachBubble, x - 520, y - 340, 250, 180);
 
-  //game name
+  // Hypnotizing eyes
+
+  // Game instructions
+  fill(0, 0, 0);
+  textSize(14.5);
+  textAlign(CENTER);
+  textFont("Arial");
+  let gameInstructions =
+    "You are under my control now! You will help me to crash all the bowls. Move the paddle with the right and left arrow keys. If you fail, my human will be maaaaad...at you!";
+  text(gameInstructions, x - 495, y - 311, 205, 300);
+
+  // Game name
   fill(0, 0, 0);
   textSize(40);
   textFont("Arial");
-  text("Crazy Kitten", x - 660, y - 180, 0);
+  text("HypnoPaws", x - 550, y - 170, 0);
 
-  //game instructions
-  fill(0, 0, 0);
-  textSize(10);
-  textFont("Arial");
-  text("Move the padle bla bla bla", x - 460, y - 300);
-
-  //buttons
+  // Buttons
   push();
   strokeWeight(2);
   stroke(0, 0, 0);
-  fill(0, 200, 0);
+  fill(204, 255, 204);
 
   rect(x - 450, y - 100, 200, 50, 20);
   pop();
 
-  //button "play game"
+  // Button "play game"
   fill(0, 0, 0);
   textSize(20);
   textFont("Arial");
-  text("Play game", x - 400, y - 70);
+  text("Play game", x - 350, y - 70);
+}
+
+function lostScreen() {
+  backgroundScreen();
+
+  // Cat and speach bubble
+  image(orangeCat, x - 130, y - 50, 50, 50);
+  image(angryPerson, x - 400, y - 340, 400, 400);
+  image(speachBubble, x - 550, y - 340, 250, 180);
+
+  // Game instructions
+  fill(0, 0, 0);
+  textSize(15);
+  textAlign(CENTER);
+  textFont("Arial");
+  let lostText =
+    "WHAT ARE YOU GOING!!! How dare you blame my kitten for this, this is all your fault!";
+  text(lostText, x - 525, y - 295, 205, 300);
+
+  // Buttons
+  push();
+  strokeWeight(2);
+  stroke(0, 0, 0);
+  fill(204, 255, 204);
+
+  rect(x - 550, y - 100, 200, 50, 20);
+  pop();
+
+  // Button "Try again"
+  fill(0, 0, 0);
+  textSize(20);
+  textFont("Arial");
+  text("Try again", x - 450, y - 70);
+
+  //if you lose, the color of the wallpaper will change
+  if (state === "resultLost") {
+    wallColor = color(255, 102, 102);
+  }
 }
 
 function ball() {
@@ -169,11 +221,32 @@ function gameScreen() {
 
   paddle();
   ball();
+
+  // Condition for loose screen shown
+  if (ballY > 400) {
+    state = "resultLost";
+  }
+}
+
+// Checks if ball hit the bowl and gives a value to be used in another function to make the bowl disappear
+function detectBowl() {
+  if (ballY < bowlY - r && ballX > bowlX && ballX < bowlX + "width of bowl") {
+    //"command here to give us a value that can be used in another command to make the bricks disappear"
+  }
+}
+
+// To reset ball and paddle to start position after each game
+function reset() {
+  ballX = 350;
+  ballY = 180;
+  r = 20;
+  paddleX = 300;
+  paddleY = 385;
+  speedX = 5;
+  speedY = 2;
 }
 
 function draw() {
-  startScreen();
-
   // Paddle movement inspired by Garrit's emoji example https://pixelkind.github.io/foundationsofprogramming/programming/12-02-exercise
   if (keyIsDown(37)) {
     paddleX = paddleX - paddleMove;
@@ -187,13 +260,54 @@ function draw() {
   if (ballX > 700 - r || ballX < 0 + r) {
     speedX = -speedX;
   }
-  //Ceiling blockade (for now until we finish bowls)
+  // Ceiling blockade (for now until we finish bowls)
   if (ballY < 0 + r) {
     speedY = -speedY;
   }
-  //Paddle blockade at floor side
+  // Paddle blockade at floor side
   if (ballY > paddleY - r && ballX > paddleX && ballX < paddleX + 150) {
     speedY = -speedY;
+  }
+
+  // Conditions for showing screens - linked to mouseClicked below
+  if (state === "start") {
+    startScreen();
+    wallColor = color(255, 213, 213);
+  } else if (state === "game") {
+    gameScreen();
+    wallColor = color(255, 213, 213);
+  } else if (state === "resultLost") {
+    lostScreen();
+    reset();
+  } else if (state === "resultWin") {
+    winScreen();
+    reset();
+  }
+}
+
+// Switch between screens when buttons are clicked/
+function mouseClicked() {
+  if (
+    state === "start" &&
+    mouseX >= 250 &&
+    mouseX <= 450 &&
+    mouseY >= 300 &&
+    mouseY <= 350
+  ) {
+    state = "game";
+  } else if (
+    (state === "resultWin" &&
+      mouseX >= 300 &&
+      mouseX <= 400 &&
+      mouseY >= 210 &&
+      mouseY <= 260) ||
+    (state === "resultLost" &&
+      mouseX >= 155 &&
+      mouseX <= 350 &&
+      mouseY >= 300 &&
+      mouseY <= 350)
+  ) {
+    state = "start";
   }
 }
 
