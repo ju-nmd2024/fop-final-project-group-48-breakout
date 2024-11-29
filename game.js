@@ -22,7 +22,7 @@ let COLUMNS = 10;
 let ROWS = 2;
 
 // To make game begin at startScreen
-let state = "start";
+let state = "game";
 
 // Load pre-made images into code
 function preload() {
@@ -321,26 +321,14 @@ function mouseClicked() {
 //     and trying to control the behaviour of the human!
 
 //start screen
-//- make the button interactive (move a bit to the left?)
-//- write instructions in the speach bubble
 //- decide name
-//- make the button interactive
 
 //game screen
 //- the the bowls interactive
 //- make the paddle stop at x (0 & 700)
 //- make ball stop at y = 400
 //- when the ball hits a bowl - speach bubble will appear with random text
+//-fix the paddle so the ball doesn't get stuck on it
 
 //win screen
-//- create a "play again" button and make it interactive
-//- change the text in the speach bubble
 //- maybe add some fireworks?
-
-//lose screen
-//- create a "play again" button and make it interactive
-//- change the text in the speach bubble
-//- change the cat to a human?
-
-//Game states
-//fix mouseClicked (start --> game)(game --> win)(game --> lose)
