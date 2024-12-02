@@ -5,23 +5,10 @@ let greenBowl;
 let orangeBowl;
 let speachBubble;
 
-// Paddle var/const
-const paddleMove = 5;
-let paddleX = 300;
-let paddleY = 385;
-
-// Ball variables
-let ballX = 350;
-let ballY = 180;
-let r = 20;
-let speedX = 5;
-let speedY = 2;
-
 let bowls = [];
 let COLUMNS = 10;
 let ROWS = 2;
 
-// To make game begin at startScreen
 let state = "game";
 
 // Load pre-made images into code
@@ -66,9 +53,15 @@ function setup() {
   }
 
   wallColor = color(255, 213, 213);
+
+  // Initialize paddle and ball
+  paddle = new Paddle();
+  ball = new Ball();
 }
 
 let wallColor;
+let paddle;
+let ball;
 
 class Bowl {
   constructor(x, y, width, height, img) {
@@ -81,6 +74,83 @@ class Bowl {
 
   draw() {
     image(this.img, this.x, this.y, this.width, this.height);
+  }
+}
+
+class Paddle {
+  constructor() {
+    this.x = 300;
+    this.y = 385;
+    this.width = 150;
+    this.height = 15;
+    this.speed = 5;
+  }
+
+  move() {
+    if (keyIsDown(37)) {
+      // Left arrow key
+      this.x = max(this.x - this.speed, 0);
+    } else if (keyIsDown(39)) {
+      // Right arrow key
+      this.x = min(this.x + this.speed, width - this.width);
+    }
+  }
+
+  draw() {
+    fill(100);
+    rect(this.x, this.y, this.width, this.height, 10);
+  }
+}
+
+class Ball {
+  constructor() {
+    this.x = 350;
+    this.y = 180;
+    this.r = 20;
+    this.speedX = 5;
+    this.speedY = 2;
+  }
+
+  move() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+    // Side walls
+    if (this.x > width - this.r || this.x < this.r) {
+      this.speedX = -this.speedX;
+    }
+
+    // Ceiling
+    if (this.y < this.r) {
+      this.speedY = -this.speedY;
+    }
+
+    // Paddle collision
+    if (
+      this.y > paddle.y - this.r &&
+      this.x > paddle.x &&
+      this.x < paddle.x + paddle.width
+    ) {
+      this.speedY = -this.speedY;
+    }
+
+    // Ball out of bounds
+    if (this.y > height) {
+      state = "resultLost";
+    }
+  }
+
+  draw() {
+    fill(152, 204, 255);
+    ellipse(this.x, this.y, this.r * 1.5, this.r * 1.5);
+  }
+
+  reset() {
+    this.x = 350;
+    this.y = 180;
+    this.r = 20;
+    this.speedX = 5;
+    this.speedY = 2;
   }
 }
 
@@ -171,7 +241,7 @@ function lostScreen() {
   textAlign(CENTER);
   textFont("Arial");
   let lostText =
-    "WHAT ARE YOU GOING!!! How dare you blame my kitten for this, this is all your fault!";
+    "WHAT ARE YOU DOING!!! How dare you blame my kitten for this, this is all your fault!";
   text(lostText, x - 525, y - 295, 205, 300);
 
   // Buttons
@@ -195,16 +265,6 @@ function lostScreen() {
   }
 }
 
-function ball() {
-  fill(152, 204, 255);
-  ellipse(ballX, ballY, r * 1.5, r * 1.5);
-}
-
-function paddle() {
-  fill(100);
-  rect(paddleX, paddleY, 150, 15, 10);
-}
-
 function gameScreen() {
   backgroundScreen();
 
@@ -219,57 +279,24 @@ function gameScreen() {
     }
   }
 
-  paddle();
-  ball();
+  paddle.move();
+  paddle.draw();
+  ball.move();
+  ball.draw();
 
-  // Condition for loose screen shown
-  if (ballY > 400) {
+  // Check for game over
+  if (ball.y > height) {
     state = "resultLost";
   }
 }
 
-// Checks if ball hit the bowl and gives a value to be used in another function to make the bowl disappear
-function detectBowl() {
-  if (ballY < bowlY - r && ballX > bowlX && ballX < bowlX + "width of bowl") {
-    //"command here to give us a value that can be used in another command to make the bricks disappear"
-  }
-}
-
-// To reset ball and paddle to start position after each game
 function reset() {
-  ballX = 350;
-  ballY = 180;
-  r = 20;
-  paddleX = 300;
-  paddleY = 385;
-  speedX = 5;
-  speedY = 2;
+  ball.reset();
+  paddle.x = 300;
+  paddle.y = 385;
 }
 
 function draw() {
-  // Paddle movement inspired by Garrit's emoji example https://pixelkind.github.io/foundationsofprogramming/programming/12-02-exercise
-  if (keyIsDown(37)) {
-    paddleX = paddleX - paddleMove;
-  } else if (keyIsDown(39)) {
-    paddleX = paddleX + paddleMove;
-  }
-  // Ball movement inspired by https://editor.p5js.org/icm/sketches/BJKWv5Tn
-  ballX += speedX;
-  ballY += speedY;
-  //Side walls blockade
-  if (ballX > 700 - r || ballX < 0 + r) {
-    speedX = -speedX;
-  }
-  // Ceiling blockade (for now until we finish bowls)
-  if (ballY < 0 + r) {
-    speedY = -speedY;
-  }
-  // Paddle blockade at floor side
-  if (ballY > paddleY - r && ballX > paddleX && ballX < paddleX + 150) {
-    speedY = -speedY;
-  }
-
-  // Conditions for showing screens - linked to mouseClicked below
   if (state === "start") {
     startScreen();
     wallColor = color(255, 213, 213);
