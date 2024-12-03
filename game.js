@@ -21,6 +21,7 @@ function preload() {
   orangeBowl = loadImage("orangeBowl.png");
   speachBubble = loadImage("speachBubble.png");
   reverseSpeachBubble = loadImage("reverseSpeachBubble.png");
+  hypnoEyes = loadImage("hypnoEyes.png");
 }
 
 function setup() {
@@ -29,6 +30,8 @@ function setup() {
 
   x = 700;
   y = 400;
+
+  catEyes = new CatEyes(350, 300); // Set initial position for the eyes
 
   // Create bowls and store them in a 2D array
   let bowlWidth = 60.5; // Width of each bowl
@@ -63,6 +66,7 @@ function setup() {
 let wallColor;
 let paddle;
 let ball;
+angleMode(DEGREES);
 
 class Bowl {
   constructor(x, y, width, height, img) {
@@ -159,6 +163,53 @@ class Ball {
   }
 }
 
+class CatEyes {
+  constructor(x, y) {
+    this.x = 700; // Receive x position for the eyes (use dynamic x position)
+    this.y = 400; // Receive y position for the eyes (use dynamic y position)
+    this.width = 50; // Define width for each eye image
+    this.height = 50; // Define height for each eye image
+    this.angle = 1; // Initial angle of rotation (start from 0)
+    this.speed = 10; // Initial speed of rotation
+  }
+
+  move() {
+    // Increment the angle to rotate the eyes
+    this.angle += 1 * this.speed; // Rotate 1 degree per frame
+    if (this.angle >= 360) {
+      this.angle = 0; // Reset angle after a full rotation
+    }
+  }
+
+  draw() {
+    // Draw the first eye (left)
+    push();
+    translate(this.x - 140, this.y - 230); // Position of the first eye
+    rotate(this.angle); // Apply rotation to the first eye
+    image(
+      hypnoEyes,
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    ); // Draw first eye centered
+    pop();
+
+    // Draw the second eye (right)
+    push();
+    translate(this.x - 75, this.y - 230); // Position of the second eye
+    rotate(this.angle); // Apply the same rotation to the second eye
+    image(
+      hypnoEyes,
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    ); // Draw second eye centered
+    pop();
+  }
+}
+
 function backgroundScreen() {
   // Floor brown
   fill(246, 198, 150);
@@ -198,8 +249,6 @@ function startScreen() {
   // Cat and speach bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
   image(speachBubble, x - 520, y - 340, 250, 180);
-
-  // Hypnotizing eyes
 
   // Game instructions
   fill(0, 0, 0);
@@ -399,13 +448,17 @@ function draw() {
   if (state === "start") {
     startScreen();
     wallColor = color(255, 213, 213);
+    catEyes.move(); // Update the position and angle of rotation
+    catEyes.draw(); // Draw the eyes at the updated position and rotation
   } else if (state === "game") {
     gameScreen();
+    catEyes.move(); // Update the position and angle of rotation
+    catEyes.draw(); // Draw the eyes at the updated position and rotation
     wallColor = color(255, 213, 213);
   } else if (state === "resultLost") {
     lostScreen();
     reset();
-  } else if (state === "resultWin") {
+  } else if (state === "resultWi") {
     winScreen();
     reset();
   }
@@ -450,14 +503,14 @@ function mouseClicked() {
 //     and trying to control the behaviour of the human!
 
 //start screen
-//- decide name
+//- decide and fix the game name
+// - change the text?
 
 //game screen
-//- the the bowls interactive
-//- make the paddle stop at x (0 & 700)
-//- make ball stop at y = 400
-//- when the ball hits a bowl - speach bubble will appear with random text
-//-fix the paddle so the ball doesn't get stuck on it
+//- add hypnotizing eyes to the cat
+//- when the ball hits a bowl - speach bubble will appear with a random text
+//- fix the paddle so the ball doesn't get stuck on it (block the sides with x & y)
 
 //win screen
+//- change the text?
 //- maybe add some fireworks?
