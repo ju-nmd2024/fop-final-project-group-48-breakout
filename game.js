@@ -9,12 +9,14 @@ let bowls = [];
 let COLUMNS = 10;
 let ROWS = 2;
 
-let state = "start";
+let state = "game";
 
 let wallColor;
 let paddle;
 let ball;
 angleMode(DEGREES);
+x = 700;
+y = 400;
 
 function preload() {
   angryPerson = loadImage("angryPerson.png");
@@ -31,8 +33,6 @@ function preload() {
 function setup() {
   createCanvas(700, 400);
   noStroke();
-
-  catEyes = new CatEyes(350, 300); // Set initial position for the eyes
 
   x = 700;
   y = 400;
@@ -162,12 +162,12 @@ class Ball {
   }
 }
 
-class CatEyes {
-  constructor(x, y) {
-    this.x = 700; // Receive x position for the eyes (use dynamic x position)
-    this.y = 400; // Receive y position for the eyes (use dynamic y position)
-    this.width = 50; // Define width for each eye image
-    this.height = 50; // Define height for each eye image
+class CatEye {
+  constructor(x, y, width, height) {
+    this.x = x; // Receive x position for the eyes (use dynamic x position)
+    this.y = y; // Receive y position for the eyes (use dynamic y position)
+    this.width = width; // Define width for each eye image
+    this.height = height; // Define height for each eye image
     this.angle = 0; // Initial angle of rotation (start from 0)
     this.speed = 10; // Initial speed of rotation
   }
@@ -181,9 +181,8 @@ class CatEyes {
   }
 
   draw() {
-    // Draw the first eye (left)
     push();
-    translate(this.x - 140, this.y - 230); // Position of the first eye
+    translate(this.x, this.y); // Position of the first eye
     rotate(this.angle); // Apply rotation to the first eye
     image(
       hypnoEyes,
@@ -193,21 +192,14 @@ class CatEyes {
       this.height
     ); // Draw first eye centered
     pop();
-
-    // Draw the second eye (right)
-    push();
-    translate(this.x - 75, this.y - 230); // Position of the second eye
-    rotate(this.angle); // Apply the same rotation to the second eye
-    image(
-      hypnoEyes,
-      -this.width / 2,
-      -this.height / 2,
-      this.width,
-      this.height
-    ); // Draw second eye centered
-    pop();
   }
 }
+
+// Set initial position for the eyes
+let catEye1 = new CatEye(x - 145, y - 220, 50, 50);
+let catEye2 = new CatEye(x - 70, y - 220, 50, 50);
+let catEye3 = new CatEye(x - 52, y - 72, 15, 15);
+let catEye4 = new CatEye(x - 32, y - 72, 15, 15);
 
 function backgroundScreen() {
   // Floor brown
@@ -468,10 +460,16 @@ function draw() {
   // Conditions for showing screens - linked to mouseClicked below
   if (state === "start") {
     startScreen();
-    catEyes.move(); // Update the position and angle of rotation
-    catEyes.draw(); // Draw the eyes at the updated position and rotation
+    catEye1.move(); // Update the position and angle of rotation
+    catEye1.draw(); // Draw the eyes at the updated position and rotation
+    catEye2.move(); // Update the position and angle of rotation
+    catEye2.draw(); // Draw the eyes at the updated position and rotation
   } else if (state === "game") {
     gameScreen();
+    catEye3.move(); // Update the position and angle of rotation
+    catEye3.draw(); // Draw the eyes at the updated position and rotation
+    catEye4.move(); // Update the position and angle of rotation
+    catEye4.draw(); // Draw the eyes at the updated position and rotation
     wallColor = color(255, 213, 213);
   } else if (state === "resultLost") {
     lostScreen();
