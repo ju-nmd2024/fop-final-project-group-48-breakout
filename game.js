@@ -9,7 +9,7 @@ let bowls = [];
 let COLUMNS = 10;
 let ROWS = 2;
 
-let state = "start";
+let state = "resultWin";
 
 let wallColor;
 angleMode(DEGREES);
@@ -27,6 +27,7 @@ function preload() {
   speechBubble = loadImage("speechBubble.png");
   reverseSpeechBubble = loadImage("reverseSpeechBubble.png");
   hypnoEyes = loadImage("hypnoEyes.png");
+  hypnoPaws = loadImage("hypnoPaws.png");
 }
 
 function setup() {
@@ -269,6 +270,8 @@ function startScreen() {
 
   speechBubbleStart.draw();
 
+  image(hypnoPaws, x - 650, y - 185, 250, 100);
+
   // Cat and speech bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
 
@@ -285,12 +288,6 @@ function startScreen() {
   let gameInstructions =
     "You are under my control now! You will help me to crash all the bowls. Move the paddle with the right and left arrow keys. If you fail, my human will be maaaaad...at you!";
   text(gameInstructions, x - 495, y - 311, 205, 300);
-
-  // Game name
-  fill(0, 0, 0);
-  textSize(40);
-  textFont("Arial");
-  text("HypnoPaws", x - 550, y - 170, 0);
 
   // Buttons
   push();
@@ -365,8 +362,9 @@ function winScreen() {
   textSize(15);
   textAlign(CENTER);
   textFont("Arial");
-  let wonText = "GOOD JOB!";
-  text(wonText, x - 500, y - 295, 205, 300);
+  let wonText =
+    "MEOW! You did good! I'm proud of you but I guess my human isn't. But she will not notice that all the bowls are crashed - she got more! ";
+  text(wonText, x - 520, y - 300, 220, 300);
 
   // Buttons
   push();
@@ -551,10 +549,6 @@ function mouseClicked() {
 //disapear and the angry human will show up will blame everything on you.
 // * - a thought is that we can add eyes on the cat so it looks like it is hypnotized
 //     and trying to control the behaviour of the human!
-
-//start screen
-//- decide and fix the game name
-// - change the text?
 
 //game screen
 //- when the ball hits a bowl - speech bubble will appear with a random text
