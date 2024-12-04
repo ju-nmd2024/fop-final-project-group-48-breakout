@@ -12,11 +12,10 @@ let ROWS = 2;
 let state = "start";
 
 let wallColor;
-let paddle;
-let ball;
 angleMode(DEGREES);
 x = 700;
 y = 400;
+wallColor = color(255, 213, 213);
 
 function preload() {
   angryPerson = loadImage("angryPerson.png");
@@ -56,12 +55,7 @@ function setup() {
       bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
     }
   }
-
-  wallColor = color(255, 213, 213);
-
   // Initialize paddle and ball
-  paddle = new Paddle();
-  ball = new Ball();
 }
 
 class Bowl {
@@ -83,11 +77,11 @@ class Bowl {
 }
 
 class Paddle {
-  constructor() {
-    this.x = 300;
-    this.y = 385;
-    this.width = 150;
-    this.height = 15;
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
     this.speed = 8;
   }
 
@@ -107,11 +101,13 @@ class Paddle {
   }
 }
 
+let paddle = new Paddle(x - 400, y - 15, 150, 15);
+
 class Ball {
-  constructor() {
-    this.x = 350;
-    this.y = 180;
-    this.r = 20;
+  constructor(x, y, r) {
+    this.x = x;
+    this.y = y;
+    this.r = RADIUS;
     this.speedX = 4;
     this.speedY = 3;
   }
@@ -147,7 +143,7 @@ class Ball {
 
   draw() {
     fill(152, 204, 255);
-    ellipse(this.x, this.y, this.r * 1.5, this.r * 1.5);
+    ellipse(this.x, this.y, this.r * 1.5);
   }
 
   reset() {
@@ -158,6 +154,8 @@ class Ball {
     this.speedY = 3;
   }
 }
+
+let ball = new Ball(x - 350, y - 520, 20);
 
 class CatEye {
   constructor(x, y, width, height) {
@@ -220,16 +218,16 @@ let speechBubbleStart = new SpeechBubble(
 let speechBubbleGame = new SpeechBubble(speechBubble, x - 165, y - 110, 80, 50);
 let speechBubbleWin = new SpeechBubble(
   speechBubble,
-  x - 540,
+  x - 560,
   y - 330,
   300,
   160
 );
 let speechBubbleLost = new SpeechBubble(
   speechBubble,
-  x - 590,
+  x - 550,
   y - 330,
-  300,
+  250,
   160
 );
 
@@ -269,9 +267,15 @@ function backgroundScreen() {
 function startScreen() {
   backgroundScreen();
 
+  speechBubbleStart.draw();
+
   // Cat and speech bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
-  //image(speechBubble, x - 520, y - 340, 250, 180);
+
+  catEye1.move(); // Update the position and angle of rotation
+  catEye1.draw(); // Draw the eyes at the updated position and rotation
+  catEye2.move(); // Update the position and angle of rotation
+  catEye2.draw(); // Draw the eyes at the updated position and rotation
 
   // Game instructions
   fill(0, 0, 0);
@@ -311,8 +315,9 @@ function lostScreen() {
   // Cat and speech bubble
   image(orangeCat, x - 130, y - 50, 50, 50);
   image(angryPerson, x - 400, y - 340, 400, 400);
-  //image(speechBubble, x - 550, y - 340, 250, 180);
   image(reverseSpeechBubble, x - 80, y - 70, 50, 35);
+
+  speechBubbleLost.draw();
 
   // Angry person talking
   fill(0, 0, 0);
@@ -352,7 +357,8 @@ function winScreen() {
 
   // Cat and speech bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
-  //image(speechBubble, x - 520, y - 340, 250, 180);
+
+  speechBubbleWin.draw();
 
   // Game instructions
   fill(0, 0, 0);
@@ -394,9 +400,12 @@ function checkBallCollisionWithBowl(ball, bowl) {
 function gameScreen() {
   backgroundScreen();
 
-  // Cat and speech bubble
   image(orangeCat, x - 90, y - 100, 100, 100);
-  //image(speechBubble, x - 180, y - 100, 100, 50);
+
+  catEye3.move(); // Update the position and angle of rotation
+  catEye3.draw(); // Draw the eyes at the updated position and rotation
+  catEye4.move(); // Update the position and angle of rotation
+  catEye4.draw(); // Draw the eyes at the updated position and rotation
 
   let bowlsToRemove = []; // Array to collect bowls that need to be removed
   let bowlsRemaining = 0; // Count of remaining bowls
@@ -422,6 +431,8 @@ function gameScreen() {
       }
     }
   }
+
+  speechBubbleGame.draw();
 
   //Randomize kitten text based on array, inspired by Garrit's video no. 15
   function randomSpeech(speech) {
@@ -491,26 +502,15 @@ function draw() {
   if (state === "start") {
     startScreen();
     wallColor = color(255, 213, 213);
-    catEye1.move(); // Update the position and angle of rotation
-    catEye1.draw(); // Draw the eyes at the updated position and rotation
-    catEye2.move(); // Update the position and angle of rotation
-    catEye2.draw(); // Draw the eyes at the updated position and rotation
-    speechBubbleStart.draw();
+    reset();
   } else if (state === "game") {
     gameScreen();
-    catEye3.move(); // Update the position and angle of rotation
-    catEye3.draw(); // Draw the eyes at the updated position and rotation
-    catEye4.move(); // Update the position and angle of rotation
-    catEye4.draw(); // Draw the eyes at the updated position and rotation
     wallColor = color(255, 213, 213);
-    speechBubbleGame.draw();
   } else if (state === "resultLost") {
     lostScreen();
-    speechBubbleLost.draw();
     reset();
   } else if (state === "resultWin") {
     winScreen();
-    speechBubbleWin.draw();
     reset();
   }
 }
