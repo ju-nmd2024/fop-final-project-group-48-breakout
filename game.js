@@ -11,6 +11,11 @@ let ROWS = 2;
 
 let state = "start";
 
+let wallColor;
+let paddle;
+let ball;
+angleMode(DEGREES);
+
 // Load pre-made images into code
 function preload() {
   angryPerson = loadImage("angryPerson.png");
@@ -30,8 +35,6 @@ function setup() {
 
   x = 700;
   y = 400;
-
-  catEyes = new CatEyes(350, 300); // Set initial position for the eyes
 
   // Create bowls and store them in a 2D array
   let bowlWidth = 60.5; // Width of each bowl
@@ -62,11 +65,6 @@ function setup() {
   paddle = new Paddle();
   ball = new Ball();
 }
-
-let wallColor;
-let paddle;
-let ball;
-angleMode(DEGREES);
 
 class Bowl {
   constructor(x, y, width, height, img) {
@@ -116,8 +114,8 @@ class Ball {
     this.x = 350;
     this.y = 180;
     this.r = 20;
-    this.speedX = random(3, 7); // Random horizontal speed (between 3 and 7)
-    this.speedY = random(2, 5); // Random vertical speed (between 2 and 5)
+    this.speedX = 4;
+    this.speedY = 3;
   }
 
   move() {
@@ -126,12 +124,12 @@ class Ball {
 
     // Side walls
     if (this.x > width - this.r || this.x < this.r) {
-      this.speedX = -this.speedX + random(-1, 1); // Add slight randomness to horizontal direction
+      this.speedX = -this.speedX;
     }
 
     // Ceiling
     if (this.y < this.r) {
-      this.speedY = -this.speedY + random(-1, 1); // Add slight randomness to vertical direction
+      this.speedY = -this.speedY;
     }
 
     // Paddle collision
@@ -140,7 +138,7 @@ class Ball {
       this.x > paddle.x &&
       this.x < paddle.x + paddle.width
     ) {
-      this.speedY = -this.speedY + random(-1, 1); // Add slight randomness to vertical direction when bouncing off the paddle
+      this.speedY = -this.speedY;
     }
 
     // Ball out of bounds
@@ -158,55 +156,8 @@ class Ball {
     this.x = 350;
     this.y = 180;
     this.r = 20;
-    this.speedX = random(3, 7); // Randomize horizontal speed when resetting the ball
-    this.speedY = random(2, 5); // Randomize vertical speed when resetting the ball
-  }
-}
-
-class CatEyes {
-  constructor(x, y) {
-    this.x = 700; // Receive x position for the eyes (use dynamic x position)
-    this.y = 400; // Receive y position for the eyes (use dynamic y position)
-    this.width = 50; // Define width for each eye image
-    this.height = 50; // Define height for each eye image
-    this.angle = 1; // Initial angle of rotation (start from 0)
-    this.speed = 10; // Initial speed of rotation
-  }
-
-  move() {
-    // Increment the angle to rotate the eyes
-    this.angle += 1 * this.speed; // Rotate 1 degree per frame
-    if (this.angle >= 360) {
-      this.angle = 0; // Reset angle after a full rotation
-    }
-  }
-
-  draw() {
-    // Draw the first eye (left)
-    push();
-    translate(this.x - 140, this.y - 230); // Position of the first eye
-    rotate(this.angle); // Apply rotation to the first eye
-    image(
-      hypnoEyes,
-      -this.width / 2,
-      -this.height / 2,
-      this.width,
-      this.height
-    ); // Draw first eye centered
-    pop();
-
-    // Draw the second eye (right)
-    push();
-    translate(this.x - 75, this.y - 230); // Position of the second eye
-    rotate(this.angle); // Apply the same rotation to the second eye
-    image(
-      hypnoEyes,
-      -this.width / 2,
-      -this.height / 2,
-      this.width,
-      this.height
-    ); // Draw second eye centered
-    pop();
+    this.speedX = 4;
+    this.speedY = 3;
   }
 }
 
@@ -250,6 +201,59 @@ function startScreen() {
   image(orangeCat, x - 300, y - 340, 400, 400);
   image(speachBubble, x - 520, y - 340, 250, 180);
 
+  class CatEyes {
+    constructor(x, y) {
+      this.x = 700; // Receive x position for the eyes (use dynamic x position)
+      this.y = 400; // Receive y position for the eyes (use dynamic y position)
+      this.width = 50; // Define width for each eye image
+      this.height = 50; // Define height for each eye image
+      this.angle = 1; // Initial angle of rotation (start from 0)
+      this.speed = 10; // Initial speed of rotation
+    }
+
+    move() {
+      // Increment the angle to rotate the eyes
+      this.angle += 1 * this.speed; // Rotate 1 degree per frame
+      if (this.angle >= 360) {
+        this.angle = 0; // Reset angle after a full rotation
+      }
+    }
+
+    draw() {
+      // Draw the first eye (left)
+      push();
+      translate(this.x - 140, this.y - 230); // Position of the first eye
+      rotate(this.angle); // Apply rotation to the first eye
+      image(
+        hypnoEyes,
+        -this.width / 2,
+        -this.height / 2,
+        this.width,
+        this.height
+      ); // Draw first eye centered
+      pop();
+
+      // Draw the second eye (right)
+      push();
+      translate(this.x - 75, this.y - 230); // Position of the second eye
+      rotate(this.angle); // Apply the same rotation to the second eye
+      image(
+        hypnoEyes,
+        -this.width / 2,
+        -this.height / 2,
+        this.width,
+        this.height
+      ); // Draw second eye centered
+      pop();
+    }
+  }
+
+  catEyes = new CatEyes(350, 300); // Set initial position for the eyes
+
+  wallColor = color(255, 213, 213);
+  catEyes.move(); // Update the position and angle of rotation
+  catEyes.draw(); // Draw the eyes at the updated position and rotation
+
   // Game instructions
   fill(0, 0, 0);
   textSize(14.5);
@@ -282,6 +286,7 @@ function startScreen() {
 }
 
 function lostScreen() {
+  wallColor = color(255, 102, 102);
   backgroundScreen();
 
   // Cat and speach bubble
@@ -321,11 +326,6 @@ function lostScreen() {
   textSize(20);
   textFont("Arial");
   text("Try again", x - 450, y - 70);
-
-  //if you lose, the color of the wallpaper will change
-  if (state === "resultLost") {
-    wallColor = color(255, 102, 102);
-  }
 }
 
 function winScreen() {
@@ -370,7 +370,6 @@ function checkBallCollisionWithBowl(ball, bowl) {
     // Collision detected, return true
     return true;
   }
-  return false;
 }
 
 function gameScreen() {
@@ -405,6 +404,32 @@ function gameScreen() {
     }
   }
 
+  //Randomize kitten text based on array, inspired by Garrit's video no. 15
+  function randomSpeech(speech) {
+    let randomIndex = Math.floor(Math.random() * speech.length);
+    return speech[randomIndex];
+  }
+  //Array of texts for game screen kitten
+  const speech = [
+    "Way to go!",
+    "Break them all!",
+    "SMASH!",
+    "You rock!",
+    "BOOM!",
+  ];
+
+  if (this.hit === true) {
+    // to draw a white rectangle as background in speech bubble at every hit so text doesn't compile on top
+    fill(255, 255, 255);
+    rect(530, 320, 80, 15);
+    // Parameters for kitten text
+    textSize(12);
+    textAlign(CENTER);
+    textFont("Arial");
+    const kittenSpeech = randomSpeech(speech);
+    text(kittenSpeech, 530, 320);
+  }
+
   // After checking all bowls, remove the ones marked for removal
   for (let i = 0; i < bowlsToRemove.length; i++) {
     let { row, col } = bowlsToRemove[i];
@@ -414,7 +439,6 @@ function gameScreen() {
   // Check if the player has won (all bowls are gone)
   if (bowlsRemaining === 0) {
     state = "resultWin"; // All bowls are gone, transition to win screen
-    return; // Exit the game screen early to prevent further processing
   }
 
   // Continue with paddle and ball movement
@@ -447,13 +471,8 @@ function draw() {
   // Conditions for showing screens - linked to mouseClicked below
   if (state === "start") {
     startScreen();
-    wallColor = color(255, 213, 213);
-    catEyes.move(); // Update the position and angle of rotation
-    catEyes.draw(); // Draw the eyes at the updated position and rotation
   } else if (state === "game") {
     gameScreen();
-    catEyes.move(); // Update the position and angle of rotation
-    catEyes.draw(); // Draw the eyes at the updated position and rotation
     wallColor = color(255, 213, 213);
   } else if (state === "resultLost") {
     lostScreen();
