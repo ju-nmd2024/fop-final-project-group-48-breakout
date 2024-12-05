@@ -9,13 +9,18 @@ let bowls = [];
 let COLUMNS = 10;
 let ROWS = 2;
 
-let state = "resultWin";
+let state = "start";
 
 let wallColor;
 angleMode(DEGREES);
 x = 700;
 y = 400;
 wallColor = color(255, 213, 213);
+
+// Create bowls and store them in a 2D array
+let bowlWidth = 60.5; // Width of each bowl
+let bowlHeight = 39; // Height of each bowl
+let margin = 10; // Space between bowls
 
 function preload() {
   angryPerson = loadImage("angryPerson.png");
@@ -32,12 +37,8 @@ function preload() {
 
 function setup() {
   createCanvas(700, 400);
+  frameRate(30);
   noStroke();
-
-  // Create bowls and store them in a 2D array
-  let bowlWidth = 60.5; // Width of each bowl
-  let bowlHeight = 39; // Height of each bowl
-  let margin = 10; // Space between bowls
 
   // Loop through rows and columns to create bowls
   for (let row = 0; row < ROWS; row++) {
@@ -56,7 +57,6 @@ function setup() {
       bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
     }
   }
-  // Initialize paddle and ball
 }
 
 class Bowl {
@@ -363,7 +363,7 @@ function winScreen() {
   textAlign(CENTER);
   textFont("Arial");
   let wonText =
-    "MEOW! You did good! I'm proud of you but I guess my human isn't. But she will not notice that all the bowls are crashed - she got more! ";
+    "MEOW! You did good! I'm proud of you but I guess my human isn't. But she may not notice that all the bowls are crashed - she got more! ";
   text(wonText, x - 520, y - 300, 220, 300);
 
   // Buttons
@@ -395,6 +395,14 @@ function checkBallCollisionWithBowl(ball, bowl) {
   }
 }
 
+//Randomize kitten text based on array, inspired by Garrit's video no. 15
+function randomSpeech(speech) {
+  let randomIndex = Math.floor(Math.random() * speech.length);
+  return speech[randomIndex];
+}
+//Array of texts for game screen kitten
+const speech = ["Way to go!", "Break them!", "SMASH!", "You rock!", "BOOM!"];
+
 function gameScreen() {
   backgroundScreen();
 
@@ -422,6 +430,13 @@ function gameScreen() {
         if (checkBallCollisionWithBowl(ball, bowl)) {
           // If collision detected, mark this bowl for removal
           bowlsToRemove.push({ row, col });
+          // Parameters for kitten text
+          fill(255, 213, 213);
+          textSize(12);
+          textAlign(CENTER);
+          textFont("Arial");
+          const kittenSpeech = randomSpeech(speech);
+          text(kittenSpeech, 570, 320);
 
           // Reverse the ball's Y-speed to make it bounce
           ball.speedY = -ball.speedY;
@@ -431,32 +446,6 @@ function gameScreen() {
   }
 
   speechBubbleGame.draw();
-
-  //Randomize kitten text based on array, inspired by Garrit's video no. 15
-  function randomSpeech(speech) {
-    let randomIndex = Math.floor(Math.random() * speech.length);
-    return speech[randomIndex];
-  }
-  //Array of texts for game screen kitten
-  const speech = [
-    "Way to go!",
-    "Break them all!",
-    "SMASH!",
-    "You rock!",
-    "BOOM!",
-  ];
-
-  if (this.hit === true) {
-    // to draw a white rectangle as background in speech bubble at every hit so text doesn't compile on top
-    fill(255, 255, 255);
-    rect(530, 320, 80, 15);
-    // Parameters for kitten text
-    textSize(12);
-    textAlign(CENTER);
-    textFont("Arial");
-    const kittenSpeech = randomSpeech(speech);
-    text(kittenSpeech, 530, 320);
-  }
 
   // After checking all bowls, remove the ones marked for removal
   for (let i = 0; i < bowlsToRemove.length; i++) {
@@ -487,10 +476,20 @@ function reset() {
   paddle.x = 300;
   paddle.y = 385;
 
-  // Reset bowls (unhit)
+  // Loop through rows and columns to create bowls
   for (let row = 0; row < ROWS; row++) {
+    bowls[row] = []; // Initialize the row in the 2D array
     for (let col = 0; col < COLUMNS; col++) {
-      bowls[row][col].hit = false; // Reset bowl hit state
+      let x = col * (bowlWidth + margin) + 1; // Horizontal spacing
+      let y = row * (bowlHeight + margin) + 10; // Vertical spacing
+
+      // Alternate between different bowl colors
+      if (col % 4 === 0) bowlImage = pinkBowl;
+      else if (col % 4 === 1) bowlImage = greenBowl;
+      else if (col % 4 === 2) bowlImage = yellowBowl;
+      else bowlImage = orangeBowl;
+
+      bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
     }
   }
 }
@@ -541,22 +540,7 @@ function mouseClicked() {
   }
 }
 
-//to do list
-
-//Idea of the game
-//The cat need help from you to destroy all the bowls. The cat will cheer you on
-//while you play. If you win, the cat will thank you but if you lose - the cat will
-//disapear and the angry human will show up will blame everything on you.
-// * - a thought is that we can add eyes on the cat so it looks like it is hypnotized
-//     and trying to control the behaviour of the human!
-
-//game screen
-//- when the ball hits a bowl - speech bubble will appear with a random text
 //- fix the paddle so the ball doesn't get stuck on it (block the sides with x & y)
-
-//win screen
-//- change the text?
-//- maybe add some fireworks?
 
 //rotate eyes: 08: Example - Move your emoji
 //talking cat: 13: Exercise - Talking emoji
