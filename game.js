@@ -198,7 +198,13 @@ let speechBubbleStart = new SpeechBubble(
   300,
   160
 );
-let speechBubbleGame = new SpeechBubble(speechBubble, x - 165, y - 110, 80, 50);
+let speechBubbleWin = new SpeechBubble(
+  speechBubble,
+  x - 560,
+  y - 330,
+  300,
+  160
+);
 let speechBubbleLost = new SpeechBubble(
   speechBubble,
   x - 550,
@@ -372,13 +378,18 @@ function checkBallCollisionWithBowl(ball, bowl) {
 
 function gameScreen() {
   backgroundScreen();
-
   image(orangeCat, x - 90, y - 100, 100, 100);
 
   catEye3.move(); // Update the position and angle of rotation
   catEye3.draw(); // Draw the eyes at the updated position and rotation
   catEye4.move(); // Update the position and angle of rotation
   catEye4.draw(); // Draw the eyes at the updated position and rotation
+  // Continue with paddle and ball movement
+  paddle.move();
+  paddle.draw();
+  ball.draw();
+  ball.move();
+  //ball.draw();
 
   let bowlsToRemove = []; // Array to collect bowls that need to be removed
   let bowlsRemaining = 0; // Count of remaining bowls
@@ -416,12 +427,6 @@ function gameScreen() {
     state = "resultWin"; // All bowls are gone, transition to win screen
   }
 
-  // Continue with paddle and ball movement
-  paddle.move();
-  paddle.draw();
-  ball.move();
-  ball.draw();
-
   // Check if the ball falls out of bounds
   if (ball.y > height) {
     wallColor = color(255, 102, 102); // Set background to red
@@ -448,6 +453,7 @@ function reset() {
       else bowlImage = orangeBowl;
 
       bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
+      //bowls[row][col].draw();
     }
   }
 }
@@ -456,17 +462,15 @@ function draw() {
   // Conditions for showing screens - linked to mouseClicked below
   if (state === "start") {
     startScreen();
-    wallColor = color(255, 213, 213);
     reset();
+    wallColor = color(255, 213, 213);
   } else if (state === "game") {
     gameScreen();
-    wallColor = color(255, 213, 213);
+    //wallColor = color(255, 213, 213);
   } else if (state === "resultLost") {
     lostScreen();
-    reset();
   } else if (state === "resultWin") {
     winScreen();
-    reset();
   }
 }
 
