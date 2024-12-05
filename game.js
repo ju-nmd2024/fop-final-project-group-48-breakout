@@ -9,7 +9,7 @@ let bowls = [];
 let COLUMNS = 10;
 let ROWS = 2;
 
-let state = "resultLost";
+let state = "start";
 
 let wallColor;
 //angleMode(DEGREES);
@@ -36,7 +36,7 @@ function preload() {
 
 function setup() {
   createCanvas(700, 400);
-  frameRate(30);
+  frameRate(60);
   noStroke();
   wallColor = color(255, 213, 213);
 }
@@ -148,7 +148,7 @@ class CatEye {
     this.width = width;
     this.height = height;
     this.angle = 0; // Initial angle of rotation (start from 0)
-    this.speed = 10; // Initial speed of rotation
+    this.speed = 0.2; // Initial speed of rotation
   }
 
   move() {
