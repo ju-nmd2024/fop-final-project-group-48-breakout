@@ -39,24 +39,6 @@ function setup() {
   createCanvas(700, 400);
   frameRate(30);
   noStroke();
-
-  // Loop through rows and columns to create bowls
-  for (let row = 0; row < ROWS; row++) {
-    bowls[row] = []; // Initialize the row in the 2D array
-    for (let col = 0; col < COLUMNS; col++) {
-      let x = col * (bowlWidth + margin) + 1; // Horizontal spacing
-      let y = row * (bowlHeight + margin) + 10; // Vertical spacing
-
-      let bowlImage;
-      // Alternate between different bowl colors
-      if (col % 4 === 0) bowlImage = pinkBowl;
-      else if (col % 4 === 1) bowlImage = greenBowl;
-      else if (col % 4 === 2) bowlImage = yellowBowl;
-      else bowlImage = orangeBowl;
-
-      bowls[row][col] = new Bowl(x, y, bowlWidth, bowlHeight, bowlImage);
-    }
-  }
 }
 
 class Bowl {
@@ -217,13 +199,6 @@ let speechBubbleStart = new SpeechBubble(
   160
 );
 let speechBubbleGame = new SpeechBubble(speechBubble, x - 165, y - 110, 80, 50);
-let speechBubbleWin = new SpeechBubble(
-  speechBubble,
-  x - 560,
-  y - 330,
-  300,
-  160
-);
 let speechBubbleLost = new SpeechBubble(
   speechBubble,
   x - 550,
@@ -395,14 +370,6 @@ function checkBallCollisionWithBowl(ball, bowl) {
   }
 }
 
-//Randomize kitten text based on array, inspired by Garrit's video no. 15
-function randomSpeech(speech) {
-  let randomIndex = Math.floor(Math.random() * speech.length);
-  return speech[randomIndex];
-}
-//Array of texts for game screen kitten
-const speech = ["Way to go!", "Break them!", "SMASH!", "You rock!", "BOOM!"];
-
 function gameScreen() {
   backgroundScreen();
 
@@ -430,13 +397,6 @@ function gameScreen() {
         if (checkBallCollisionWithBowl(ball, bowl)) {
           // If collision detected, mark this bowl for removal
           bowlsToRemove.push({ row, col });
-          // Parameters for kitten text
-          fill(255, 213, 213);
-          textSize(12);
-          textAlign(CENTER);
-          textFont("Arial");
-          const kittenSpeech = randomSpeech(speech);
-          text(kittenSpeech, 570, 320);
 
           // Reverse the ball's Y-speed to make it bounce
           ball.speedY = -ball.speedY;
@@ -444,8 +404,6 @@ function gameScreen() {
       }
     }
   }
-
-  speechBubbleGame.draw();
 
   // After checking all bowls, remove the ones marked for removal
   for (let i = 0; i < bowlsToRemove.length; i++) {
