@@ -9,7 +9,7 @@ let bowls = [];
 let COLUMNS = 10;
 let ROWS = 2;
 
-let state = "start";
+let state = "resultLost";
 
 let wallColor;
 angleMode(DEGREES);
@@ -290,7 +290,7 @@ function lostScreen() {
   wallColor = color(255, 102, 102);
   backgroundScreen();
 
-  // Cat and speech bubble
+  // Speech bubble
   image(orangeCat, x - 130, y - 50, 50, 50);
   image(angryPerson, x - 400, y - 340, 400, 400);
   image(reverseSpeechBubble, x - 80, y - 70, 50, 35);
@@ -363,74 +363,53 @@ function winScreen() {
   text("Try again", x - 450, y - 70);
 }
 
-function checkBallCollisionWithBowl(ball, bowl) {
-  // Check if the ball is colliding with the bowl
-  if (
-    ball.x > bowl.x &&
-    ball.x < bowl.x + bowl.width &&
-    ball.y - ball.r < bowl.y + bowl.height &&
-    ball.y + ball.r > bowl.y
-  ) {
-    // Collision detected, return true
-    return true;
-  }
-}
-
 function gameScreen() {
   backgroundScreen();
+
   image(orangeCat, x - 90, y - 100, 100, 100);
 
   catEye3.move(); // Update the position and angle of rotation
   catEye3.draw(); // Draw the eyes at the updated position and rotation
   catEye4.move(); // Update the position and angle of rotation
   catEye4.draw(); // Draw the eyes at the updated position and rotation
-  // Continue with paddle and ball movement
+
   paddle.move();
   paddle.draw();
-  ball.draw();
+
   ball.move();
-  //ball.draw();
+  ball.draw();
 
-  let bowlsToRemove = []; // Array to collect bowls that need to be removed
-  let bowlsRemaining = 0; // Count of remaining bowls
+  let allBowlsHit = true;
 
-  // Draw bowls and check for collisions
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLUMNS; col++) {
-      let bowl = bowls[row][col]; // Get the current bowl
+      let bowl = bowls[row][col];
+      bowl.draw();
 
-      if (bowl) {
-        // Make sure the bowl still exists (it could be removed)
-        bowlsRemaining++; // Count remaining bowls
-        bowls[row][col].draw(); // Draw each bowl
+      // Check for collision
+      if (
+        !bowl.hit &&
+        dist(
+          ball.x,
+          ball.y,
+          bowl.x + bowl.width / 2,
+          bowl.y + bowl.height / 2
+        ) <
+          ball.r + bowl.width / 2
+      ) {
+        bowl.hit = true; // Mark bowl as hit
+        ball.speedY = -ball.speedY; // Bounce the ball
+      }
 
-        // Check if the ball collides with the bowl
-        if (checkBallCollisionWithBowl(ball, bowl)) {
-          // If collision detected, mark this bowl for removal
-          bowlsToRemove.push({ row, col });
-
-          // Reverse the ball's Y-speed to make it bounce
-          ball.speedY = -ball.speedY;
-        }
+      // Check if all bowls are hit
+      if (!bowl.hit) {
+        allBowlsHit = false;
       }
     }
   }
-
-  // After checking all bowls, remove the ones marked for removal
-  for (let i = 0; i < bowlsToRemove.length; i++) {
-    let { row, col } = bowlsToRemove[i];
-    bowls[row].splice(col, 1); // Remove bowl from the array
-  }
-
-  // Check if the player has won (all bowls are gone)
-  if (bowlsRemaining === 0) {
-    state = "resultWin"; // All bowls are gone, transition to win screen
-  }
-
-  // Check if the ball falls out of bounds
-  if (ball.y > height) {
-    wallColor = color(255, 102, 102); // Set background to red
-    state = "resultLost"; // Ball fell below the screen, you lost
+  // Check win condition
+  if (allBowlsHit) {
+    state = "resultWin";
   }
 }
 
