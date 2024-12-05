@@ -12,10 +12,9 @@ let ROWS = 2;
 let state = "resultLost";
 
 let wallColor;
-angleMode(DEGREES);
+//angleMode(DEGREES);
 x = 700;
 y = 400;
-wallColor = color(255, 213, 213);
 
 // Create bowls and store them in a 2D array
 let bowlWidth = 60.5;
@@ -39,6 +38,7 @@ function setup() {
   createCanvas(700, 400);
   frameRate(30);
   noStroke();
+  wallColor = color(255, 213, 213);
 }
 
 class Bowl {
@@ -91,7 +91,7 @@ class Ball {
   constructor(x, y, r) {
     this.x = x;
     this.y = y;
-    this.r = RADIUS;
+    this.r = 10;
     this.speedX = 4;
     this.speedY = 3;
   }
