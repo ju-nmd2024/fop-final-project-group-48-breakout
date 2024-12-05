@@ -18,9 +18,9 @@ y = 400;
 wallColor = color(255, 213, 213);
 
 // Create bowls and store them in a 2D array
-let bowlWidth = 60.5; // Width of each bowl
-let bowlHeight = 39; // Height of each bowl
-let margin = 10; // Space between bowls
+let bowlWidth = 60.5;
+let bowlHeight = 39;
+let margin = 10;
 
 function preload() {
   angryPerson = loadImage("angryPerson.png");
@@ -51,9 +51,10 @@ class Bowl {
     this.hit = false; // Track if the bowl has been hit
   }
 
+  // ChatGPT, screenshots are available
+  // Only draw if the bowl has not been hit
   draw() {
     if (!this.hit) {
-      // Only draw if the bowl has not been hit
       image(this.img, this.x, this.y, this.width, this.height);
     }
   }
@@ -173,7 +174,7 @@ class CatEye {
   }
 }
 
-// Set initial position for the eyes
+// Position for the eyes
 let catEye1 = new CatEye(x - 145, y - 220, 50, 50);
 let catEye2 = new CatEye(x - 70, y - 220, 50, 50);
 let catEye3 = new CatEye(x - 52, y - 72, 15, 15);
@@ -253,7 +254,6 @@ function startScreen() {
 
   image(hypnoPaws, x - 650, y - 185, 250, 100);
 
-  // Cat and speech bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
 
   catEye1.move(); // Update the position and angle of rotation
@@ -335,10 +335,9 @@ function winScreen() {
 
   // Cat and speech bubble
   image(orangeCat, x - 300, y - 340, 400, 400);
-
   speechBubbleWin.draw();
 
-  // Game instructions
+  // Cat talk
   fill(0, 0, 0);
   textSize(15);
   textAlign(CENTER);
@@ -368,10 +367,10 @@ function gameScreen() {
 
   image(orangeCat, x - 90, y - 100, 100, 100);
 
-  catEye3.move(); // Update the position and angle of rotation
-  catEye3.draw(); // Draw the eyes at the updated position and rotation
-  catEye4.move(); // Update the position and angle of rotation
-  catEye4.draw(); // Draw the eyes at the updated position and rotation
+  catEye3.move();
+  catEye3.draw();
+  catEye4.move();
+  catEye4.draw();
 
   paddle.move();
   paddle.draw();
@@ -379,6 +378,7 @@ function gameScreen() {
   ball.move();
   ball.draw();
 
+  //ChatGPT, we have screenshots of the conversation
   let allBowlsHit = true;
 
   for (let row = 0; row < ROWS; row++) {
@@ -417,6 +417,8 @@ function reset() {
   ball.reset();
   paddle.x = 300;
   paddle.y = 385;
+
+  //ChatGPT, did not save the link because I wasn't logged in
 
   // Loop through rows and columns to create bowls
   for (let row = 0; row < ROWS; row++) {
@@ -480,8 +482,3 @@ function mouseClicked() {
     state = "start";
   }
 }
-
-//- fix the paddle so the ball doesn't get stuck on it (block the sides with x & y)
-
-//rotate eyes: 08: Example - Move your emoji
-//talking cat: 13: Exercise - Talking emoji
