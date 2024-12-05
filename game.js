@@ -36,7 +36,7 @@ function preload() {
 
 function setup() {
   createCanvas(700, 400);
-  frameRate(60);
+  frameRate(50);
   noStroke();
   wallColor = color(255, 213, 213);
 }
